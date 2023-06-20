@@ -7,11 +7,16 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
+  SetMetadata,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiKeyGuard } from 'src/auth/guards/api-key.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
 
+@UseGuards(ApiKeyGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -23,6 +28,7 @@ export class UsersController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.usersService.findAll();
   }
